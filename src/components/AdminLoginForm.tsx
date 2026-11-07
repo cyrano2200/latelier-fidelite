@@ -1,15 +1,15 @@
-"use client";
-
-import { useActionState } from "react";
-import { adminLoginAction } from "@/lib/actions";
 import { FormMessage } from "./FormMessage";
 
-export function AdminLoginForm({ showDemoHint = false }: { showDemoHint?: boolean }) {
-  const [state, action, pending] = useActionState(adminLoginAction, null);
-
+export function AdminLoginForm({
+  error,
+  showDemoHint = false,
+}: {
+  error?: string;
+  showDemoHint?: boolean;
+}) {
   return (
-    <form action={action} className="flex flex-col gap-4">
-      <FormMessage error={state?.error} />
+    <form action="/api/auth/admin" method="post" className="flex flex-col gap-4">
+      <FormMessage error={error} />
       <div className="field">
         <label htmlFor="pin">Code PIN personnel</label>
         <input
@@ -22,12 +22,12 @@ export function AdminLoginForm({ showDemoHint = false }: { showDemoHint?: boolea
           autoComplete="current-password"
         />
       </div>
-      <button type="submit" className="btn-primary w-full" disabled={pending}>
-        {pending ? "Vérification…" : "Accéder à l’espace admin"}
+      <button type="submit" className="btn-primary w-full">
+        Accéder à l’espace admin
       </button>
       {showDemoHint ? (
         <p className="text-center text-xs text-cream/45">
-          Mode démo local : le PIN initial est configuré dans les réglages.
+          Mode démo local : le PIN initial est documenté dans le README.
         </p>
       ) : null}
     </form>

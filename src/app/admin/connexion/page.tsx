@@ -7,9 +7,14 @@ import { getSettings } from "@/lib/loyalty";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminLoginPage() {
+export default async function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ erreur?: string }>;
+}) {
   if (await isAdminAuthenticated()) redirect("/admin");
   const settings = await getSettings();
+  const { erreur } = await searchParams;
 
   return (
     <main className="atmosphere flex min-h-screen items-center justify-center px-4 py-10">
@@ -30,7 +35,10 @@ export default async function AdminLoginPage() {
           <p className="mb-6 mt-2 text-sm text-cream/55">
             Entrez le code PIN de l’établissement.
           </p>
-          <AdminLoginForm showDemoHint={!process.env.DATABASE_URL} />
+          <AdminLoginForm
+            error={erreur}
+            showDemoHint={!process.env.DATABASE_URL}
+          />
           <div className="mt-6 text-center text-sm text-cream/50">
             <Link href="/" className="text-amber-soft hover:underline">
               ← Retour à l’accueil client

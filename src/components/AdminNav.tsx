@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { adminLogoutAction } from "@/lib/actions";
 
 const links = [
   { href: "/admin", label: "Tableau de bord" },
@@ -43,7 +42,7 @@ export function AdminNav({ establishmentName }: { establishmentName: string }) {
               </Link>
             );
           })}
-          <form action={adminLogoutAction}>
+          <form action="/api/auth/admin/logout" method="post">
             <button type="submit" className="btn-ghost px-3 py-1.5 text-sm">
               Déconnexion
             </button>

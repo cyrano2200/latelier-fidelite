@@ -4,14 +4,48 @@ import { sql } from "./db";
 import type { Client } from "./types";
 import { normalizeName, normalizePhone } from "./format";
 
-const CLIENT_COOKIE = "fidelio_client";
-const ADMIN_COOKIE = "fidelio_admin";
+export const CLIENT_COOKIE = "fidelio_client";
+export const ADMIN_COOKIE = "fidelio_admin";
 
 function secretKey() {
   const secret =
     process.env.SESSION_SECRET?.trim() ||
     "fidelio-dev-secret-change-me-in-production";
   return new TextEncoder().encode(secret);
+}
+
+function cookieOptions(maxAge: number) {
+  return {
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge,
+  };
+}
+
+export async function createClientToken(clientId: string) {
+  return new SignJWT({ role: "client", clientId })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("30d")
+    .sign(secretKey());
+}
+
+export async function createAdminToken() {
+  return new SignJWT({ role: "admin" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("12h")
+    .sign(secretKey());
+}
+
+export function clientCookieOptions() {
+  return cookieOptions(60 * 60 * 24 * 30);
+}
+
+export function adminCookieOptions() {
+  return cookieOptions(60 * 60 * 12);
 }
 
 export async function loginOrRegisterClient(name: string, phone: string) {
@@ -48,25 +82,13 @@ export async function loginOrRegisterClient(name: string, phone: string) {
     client = updated[0];
   }
 
-  await setClientSession(client.id);
   return { client };
 }
 
 export async function setClientSession(clientId: string) {
-  const token = await new SignJWT({ role: "client", clientId })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("30d")
-    .sign(secretKey());
-
+  const token = await createClientToken(clientId);
   const jar = await cookies();
-  jar.set(CLIENT_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30,
-  });
+  jar.set(CLIENT_COOKIE, token, clientCookieOptions());
 }
 
 export async function clearClientSession() {
@@ -86,13 +108,19 @@ export async function getCurrentClient(): Promise<Client | null> {
     const rows = await sql<Client>("SELECT * FROM clients WHERE id = $1", [
       payload.clientId,
     ]);
-    return rows[0] ?? null;
+    const c = rows[0];
+    if (!c) return null;
+    return {
+      ...c,
+      points: Number(c.points),
+      total_spent: Number(c.total_spent),
+    };
   } catch {
     return null;
   }
 }
 
-export async function loginAdmin(pin: string) {
+export async function verifyAdminPin(pin: string) {
   const settings = await sql<{ admin_pin: string }>(
     "SELECT admin_pin FROM loyalty_settings WHERE id = 1",
   );
@@ -100,23 +128,20 @@ export async function loginAdmin(pin: string) {
   if (pin.trim() !== expected) {
     return { error: "Code PIN incorrect." as const };
   }
-
-  const token = await new SignJWT({ role: "admin" })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("12h")
-    .sign(secretKey());
-
-  const jar = await cookies();
-  jar.set(ADMIN_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 12,
-  });
-
   return { ok: true as const };
+}
+
+export async function loginAdmin(pin: string) {
+  const result = await verifyAdminPin(pin);
+  if ("error" in result) return result;
+  await setAdminSession();
+  return { ok: true as const };
+}
+
+export async function setAdminSession() {
+  const token = await createAdminToken();
+  const jar = await cookies();
+  jar.set(ADMIN_COOKIE, token, adminCookieOptions());
 }
 
 export async function clearAdminSession() {

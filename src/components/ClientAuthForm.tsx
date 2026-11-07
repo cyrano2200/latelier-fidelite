@@ -1,15 +1,9 @@
-"use client";
-
-import { useActionState } from "react";
-import { clientAuthAction } from "@/lib/actions";
 import { FormMessage } from "./FormMessage";
 
-export function ClientAuthForm() {
-  const [state, action, pending] = useActionState(clientAuthAction, null);
-
+export function ClientAuthForm({ error }: { error?: string }) {
   return (
-    <form action={action} className="flex flex-col gap-4">
-      <FormMessage error={state?.error} />
+    <form action="/api/auth/client" method="post" className="flex flex-col gap-4">
+      <FormMessage error={error} />
       <div className="field">
         <label htmlFor="name">Nom</label>
         <input
@@ -34,8 +28,8 @@ export function ClientAuthForm() {
           minLength={8}
         />
       </div>
-      <button type="submit" className="btn-primary mt-2 w-full" disabled={pending}>
-        {pending ? "Connexion…" : "Se connecter / S’inscrire"}
+      <button type="submit" className="btn-primary mt-2 w-full">
+        Se connecter / S’inscrire
       </button>
       <p className="text-center text-xs leading-relaxed text-cream/45">
         Pas de mot de passe pour commencer. Votre téléphone sert d’identifiant

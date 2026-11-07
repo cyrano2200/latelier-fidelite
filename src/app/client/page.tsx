@@ -4,7 +4,6 @@ import { ActivityBadge } from "@/components/ActivityBadge";
 import { RedeemCodeForm } from "@/components/RedeemCodeForm";
 import { RedeemRewardButton } from "@/components/RedeemRewardButton";
 import { StatCard } from "@/components/StatCard";
-import { clientLogoutAction } from "@/lib/actions";
 import { getCurrentClient } from "@/lib/auth";
 import { formatDate, formatEuro, formatPoints } from "@/lib/format";
 import {
@@ -16,10 +15,15 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export default async function ClientDashboardPage() {
+export default async function ClientDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ erreur?: string; succes?: string }>;
+}) {
   const client = await getCurrentClient();
   if (!client) redirect("/");
 
+  const { erreur, succes } = await searchParams;
   const [settings, visits, transactions, rewards] = await Promise.all([
     getSettings(),
     getClientVisits(client.id),
@@ -44,7 +48,7 @@ export default async function ClientDashboardPage() {
             <Link href="/" className="btn-ghost text-sm">
               Accueil
             </Link>
-            <form action={clientLogoutAction}>
+            <form action="/api/auth/client/logout" method="post">
               <button type="submit" className="btn-ghost text-sm">
                 Déconnexion
               </button>
@@ -79,7 +83,7 @@ export default async function ClientDashboardPage() {
           <p className="mb-4 mt-1 text-sm text-cream/55">
             Scannez le QR du ticket ou saisissez le code remis par le personnel.
           </p>
-          <RedeemCodeForm />
+          <RedeemCodeForm error={erreur} success={succes} />
         </section>
 
         <section className="mb-6 grid gap-6 lg:grid-cols-2">

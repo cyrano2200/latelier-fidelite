@@ -7,11 +7,16 @@ import { getSettings } from "@/lib/loyalty";
 
 export const dynamic = "force-dynamic";
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ erreur?: string }>;
+}) {
   const client = await getCurrentClient();
   if (client) redirect("/client");
 
   const settings = await getSettings();
+  const { erreur } = await searchParams;
 
   return (
     <main className="atmosphere relative min-h-screen">
@@ -53,10 +58,13 @@ export default async function HomePage() {
           <p className="mb-6 mt-2 text-sm text-cream/55">
             Identifiez-vous avec votre nom et votre numéro de téléphone.
           </p>
-          <ClientAuthForm />
+          <ClientAuthForm error={erreur} />
           <div className="mt-8 border-t border-white/10 pt-5 text-center text-sm text-cream/50">
             Personnel ?{" "}
-            <Link href="/admin/connexion" className="text-amber-soft underline-offset-4 hover:underline">
+            <Link
+              href="/admin/connexion"
+              className="text-amber-soft underline-offset-4 hover:underline"
+            >
               Accéder à l’administration
             </Link>
           </div>

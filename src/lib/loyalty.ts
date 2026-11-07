@@ -290,7 +290,7 @@ export async function createVisitCode(input: {
   const days = input.expiresInDays ?? 30;
   const created = await sql<VisitCode>(
     `INSERT INTO visit_codes (id, code, activity_type, amount, label, expires_at)
-     VALUES ($1, $2, $3, $4, $5, NOW() + ($6 || ' days')::interval)
+     VALUES ($1, $2, $3, $4, $5, NOW() + ($6::text || ' days')::interval)
      RETURNING *`,
     [id, code, input.activityType, input.amount, input.label.trim(), String(days)],
   );

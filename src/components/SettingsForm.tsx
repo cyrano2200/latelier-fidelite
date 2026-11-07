@@ -24,16 +24,19 @@ export function SettingsForm({ settings }: { settings: LoyaltySettings }) {
         <input id="tagline" name="tagline" defaultValue={settings.tagline} required />
       </div>
       <div className="field">
-        <label htmlFor="points_per_euro">Points par euro dépensé</label>
+        <label htmlFor="dirhams_per_point">Dirhams pour 1 point</label>
         <input
-          id="points_per_euro"
-          name="points_per_euro"
+          id="dirhams_per_point"
+          name="dirhams_per_point"
           type="number"
-          step="0.1"
-          min="0"
-          defaultValue={settings.points_per_euro}
+          step="1"
+          min="1"
+          defaultValue={settings.dirhams_per_point}
           required
         />
+        <p className="text-xs text-cream/45">
+          Exemple : 10 → chaque 10 DH dépensés donnent 1 point.
+        </p>
       </div>
       <div className="field">
         <label htmlFor="visit_bonus_points">Bonus de visite (points)</label>

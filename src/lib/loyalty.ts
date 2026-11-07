@@ -19,11 +19,16 @@ export async function getSettings(): Promise<LoyaltySettings> {
     "SELECT * FROM loyalty_settings WHERE id = 1",
   );
   const s = rows[0];
+  const dirhamsPerPoint = num(
+    (s as LoyaltySettings | undefined)?.dirhams_per_point ?? 10,
+  );
+  const safeDirhams = dirhamsPerPoint > 0 ? dirhamsPerPoint : 10;
   return {
     id: 1,
     establishment_name: s?.establishment_name ?? "L'Atelier",
     tagline: s?.tagline ?? "Café · Billard · Restaurant",
-    points_per_euro: num(s?.points_per_euro ?? 1),
+    dirhams_per_point: safeDirhams,
+    points_per_euro: 1 / safeDirhams,
     visit_bonus_points: num(s?.visit_bonus_points ?? 5),
     admin_pin: s?.admin_pin ?? "2468",
   };
@@ -32,23 +37,29 @@ export async function getSettings(): Promise<LoyaltySettings> {
 export async function updateSettings(input: {
   establishment_name: string;
   tagline: string;
-  points_per_euro: number;
+  dirhams_per_point: number;
   visit_bonus_points: number;
   admin_pin?: string;
 }) {
+  const dirhams =
+    input.dirhams_per_point > 0 ? input.dirhams_per_point : 10;
+  const pointsPerUnit = 1 / dirhams;
+
   if (input.admin_pin && input.admin_pin.trim().length > 0) {
     await sql(
       `UPDATE loyalty_settings
        SET establishment_name = $1,
            tagline = $2,
-           points_per_euro = $3,
-           visit_bonus_points = $4,
-           admin_pin = $5
+           dirhams_per_point = $3,
+           points_per_euro = $4,
+           visit_bonus_points = $5,
+           admin_pin = $6
        WHERE id = 1`,
       [
         input.establishment_name.trim(),
         input.tagline.trim(),
-        input.points_per_euro,
+        dirhams,
+        pointsPerUnit,
         input.visit_bonus_points,
         input.admin_pin.trim(),
       ],
@@ -58,13 +69,15 @@ export async function updateSettings(input: {
       `UPDATE loyalty_settings
        SET establishment_name = $1,
            tagline = $2,
-           points_per_euro = $3,
-           visit_bonus_points = $4
+           dirhams_per_point = $3,
+           points_per_euro = $4,
+           visit_bonus_points = $5
        WHERE id = 1`,
       [
         input.establishment_name.trim(),
         input.tagline.trim(),
-        input.points_per_euro,
+        dirhams,
+        pointsPerUnit,
         input.visit_bonus_points,
       ],
     );
@@ -77,7 +90,8 @@ export function computePointsForAmount(
   settings: LoyaltySettings,
   includeVisitBonus: boolean,
 ): number {
-  const fromSpend = Math.round(amount * settings.points_per_euro);
+  const per = settings.dirhams_per_point > 0 ? settings.dirhams_per_point : 10;
+  const fromSpend = Math.floor(Number(amount) / per);
   const bonus = includeVisitBonus ? settings.visit_bonus_points : 0;
   return fromSpend + bonus;
 }
@@ -109,7 +123,7 @@ export async function addConsumption(input: {
       points,
       input.activityType,
       input.description?.trim() ||
-        `Consommation ${input.activityType} — ${input.amount}€`,
+        `Consommation ${input.activityType} — ${input.amount} DH`,
     ],
   );
 

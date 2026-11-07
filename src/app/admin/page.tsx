@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { StatCard } from "@/components/StatCard";
 import { isAdminAuthenticated } from "@/lib/auth";
-import { formatEuro, formatPoints } from "@/lib/format";
+import { formatMoney, formatPoints } from "@/lib/format";
 import { getDashboardStats, getSettings, getTopClients } from "@/lib/loyalty";
 
 export const dynamic = "force-dynamic";
@@ -38,13 +38,13 @@ export default async function AdminDashboardPage() {
         />
         <StatCard
           label="CA total"
-          value={formatEuro(stats.revenueTotal)}
-          hint={`Aujourd’hui ${formatEuro(stats.revenueToday)}`}
+          value={formatMoney(stats.revenueTotal)}
+          hint={`Aujourd’hui ${formatMoney(stats.revenueToday)}`}
         />
         <StatCard
           label="Points distribués"
           value={formatPoints(stats.pointsDistributed)}
-          hint={`Semaine ${formatEuro(stats.revenueWeek)} · Mois ${formatEuro(stats.revenueMonth)}`}
+          hint={`Semaine ${formatMoney(stats.revenueWeek)} · Mois ${formatMoney(stats.revenueMonth)}`}
         />
       </section>
 
@@ -54,15 +54,15 @@ export default async function AdminDashboardPage() {
           <ul className="mt-4 space-y-3 text-sm">
             <li className="flex justify-between border-b border-white/8 pb-2">
               <span className="text-cream/55">CA du jour</span>
-              <span>{formatEuro(stats.revenueToday)}</span>
+              <span>{formatMoney(stats.revenueToday)}</span>
             </li>
             <li className="flex justify-between border-b border-white/8 pb-2">
               <span className="text-cream/55">CA de la semaine</span>
-              <span>{formatEuro(stats.revenueWeek)}</span>
+              <span>{formatMoney(stats.revenueWeek)}</span>
             </li>
             <li className="flex justify-between border-b border-white/8 pb-2">
               <span className="text-cream/55">CA du mois</span>
-              <span>{formatEuro(stats.revenueMonth)}</span>
+              <span>{formatMoney(stats.revenueMonth)}</span>
             </li>
             <li className="flex justify-between">
               <span className="text-cream/55">Visites (j / s / m)</span>
@@ -110,7 +110,7 @@ export default async function AdminDashboardPage() {
                   <span className="mr-2 text-cream/40">{i + 1}.</span>
                   {c.name}
                 </span>
-                <span>{formatEuro(c.total_spent)}</span>
+                <span>{formatMoney(c.total_spent)}</span>
               </Link>
             ))}
           </div>

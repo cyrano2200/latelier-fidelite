@@ -146,7 +146,7 @@ async function seedDemoExtras(db: PGlite) {
 
   await db.exec(`
     INSERT INTO visit_codes (id, code, activity_type, amount, label, expires_at)
-    SELECT 'code-1', 'CAFE10', 'cafe', 10, 'Consommation café 10€', NOW() + INTERVAL '30 days'
+    SELECT 'code-1', 'CAFE10', 'cafe', 10, 'Consommation café 10 DH', NOW() + INTERVAL '30 days'
     WHERE NOT EXISTS (SELECT 1 FROM visit_codes WHERE code = 'CAFE10');
     INSERT INTO visit_codes (id, code, activity_type, amount, label, expires_at)
     SELECT 'code-2', 'BILL20', 'billard', 20, '1h de billard', NOW() + INTERVAL '30 days'

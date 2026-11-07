@@ -143,7 +143,7 @@ export async function adminSaveSettingsAction(
   await updateSettings({
     establishment_name: String(formData.get("establishment_name") ?? ""),
     tagline: String(formData.get("tagline") ?? ""),
-    points_per_euro: Number(formData.get("points_per_euro") ?? 1),
+    dirhams_per_point: Number(formData.get("dirhams_per_point") ?? 10),
     visit_bonus_points: Number(formData.get("visit_bonus_points") ?? 5),
     admin_pin: String(formData.get("admin_pin") ?? ""),
   });

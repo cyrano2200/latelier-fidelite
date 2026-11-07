@@ -4,7 +4,7 @@ import { ActivityBadge } from "@/components/ActivityBadge";
 import { AdminClientForms } from "@/components/AdminClientForms";
 import { StatCard } from "@/components/StatCard";
 import { isAdminAuthenticated } from "@/lib/auth";
-import { formatDate, formatEuro, formatPoints } from "@/lib/format";
+import { formatDate, formatMoney, formatPoints } from "@/lib/format";
 import {
   getClientById,
   getClientTransactions,
@@ -40,7 +40,7 @@ export default async function AdminClientDetailPage({
 
       <section className="grid gap-3 sm:grid-cols-3">
         <StatCard label="Points" value={formatPoints(client.points)} />
-        <StatCard label="Total dépensé" value={formatEuro(client.total_spent)} />
+        <StatCard label="Total dépensé" value={formatMoney(client.total_spent)} />
         <StatCard label="Visites" value={String(visits.length)} />
       </section>
 
@@ -71,7 +71,7 @@ export default async function AdminClientDetailPage({
                   <p className="mt-1 text-sm text-cream/50">{t.description}</p>
                 </div>
                 <div className="text-right text-sm">
-                  <p>{formatEuro(t.amount)}</p>
+                  <p>{formatMoney(t.amount)}</p>
                   <p className={t.points >= 0 ? "text-emerald-300" : "text-rose-300"}>
                     {t.points >= 0 ? "+" : ""}
                     {t.points} pts

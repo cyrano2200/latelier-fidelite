@@ -50,7 +50,10 @@ export type LoyaltySettings = {
   id: number;
   establishment_name: string;
   tagline: string;
+  /** Conservé pour compatibilité DB ; dérivé de dirhams_per_point. */
   points_per_euro: number;
+  /** Nombre de dirhams à dépenser pour gagner 1 point (ex. 10). */
+  dirhams_per_point: number;
   visit_bonus_points: number;
   admin_pin: string;
 };

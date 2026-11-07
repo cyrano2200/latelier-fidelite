@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { CreateCodeForm } from "@/components/CreateCodeForm";
 import { ActivityBadge } from "@/components/ActivityBadge";
 import { isAdminAuthenticated } from "@/lib/auth";
-import { formatDate, formatEuro } from "@/lib/format";
+import { formatDate, formatMoney } from "@/lib/format";
 import { getActiveVisitCodes } from "@/lib/loyalty";
 
 export const dynamic = "force-dynamic";
@@ -47,7 +47,7 @@ export default async function AdminCodesPage() {
                   <td>
                     <ActivityBadge type={code.activity_type} />
                   </td>
-                  <td>{formatEuro(code.amount)}</td>
+                  <td>{formatMoney(code.amount)}</td>
                   <td>
                     {code.expires_at ? formatDate(code.expires_at) : "—"}
                   </td>

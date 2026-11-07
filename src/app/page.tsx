@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
 import { ClientAuthForm } from "@/components/ClientAuthForm";
 import { getCurrentClient } from "@/lib/auth";
+import { loyaltyRuleLabel } from "@/lib/format";
 import { getSettings } from "@/lib/loyalty";
 
 export const dynamic = "force-dynamic";
@@ -41,7 +42,9 @@ export default async function HomePage({
                 et transformez vos passages en récompenses.
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
-                <span className="badge">1 € = {settings.points_per_euro} pt</span>
+                <span className="badge">
+                  {loyaltyRuleLabel(settings.dirhams_per_point)}
+                </span>
                 <span className="badge">
                   +{settings.visit_bonus_points} pts / visite
                 </span>

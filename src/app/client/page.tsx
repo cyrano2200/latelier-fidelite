@@ -5,7 +5,7 @@ import { RedeemCodeForm } from "@/components/RedeemCodeForm";
 import { RedeemRewardButton } from "@/components/RedeemRewardButton";
 import { StatCard } from "@/components/StatCard";
 import { getCurrentClient } from "@/lib/auth";
-import { formatDate, formatEuro, formatPoints } from "@/lib/format";
+import { formatDate, formatMoney, formatPoints } from "@/lib/format";
 import {
   getActiveRewards,
   getClientTransactions,
@@ -68,7 +68,7 @@ export default async function ClientDashboardPage({
           </div>
           <StatCard
             label="Total dépensé"
-            value={formatEuro(client.total_spent)}
+            value={formatMoney(client.total_spent)}
             hint="Votre chiffre d’affaires personnel"
           />
           <StatCard
@@ -162,7 +162,7 @@ export default async function ClientDashboardPage({
                       <ActivityBadge type={tx.type} />
                     </td>
                     <td>{tx.description}</td>
-                    <td>{formatEuro(tx.amount)}</td>
+                    <td>{formatMoney(tx.amount)}</td>
                     <td className={tx.points >= 0 ? "text-emerald-300" : "text-rose-300"}>
                       {tx.points >= 0 ? "+" : ""}
                       {tx.points}

@@ -196,7 +196,8 @@ fidelio/
 
 Par défaut (modifiables dans Admin → Règles) :
 
-- **1 € dépensé = 1 point**
+- **10 DH dépensés = 1 point** (paramétrable)
+- Montants en **dirham marocain (MAD)**
 - **+5 points** bonus par visite
 - Récompenses exemples : café 100 pts, dessert 180, 1 h billard 300, menu 450
 

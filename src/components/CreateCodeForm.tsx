@@ -17,7 +17,7 @@ export function CreateCodeForm() {
           <input id="code" name="code" placeholder="Auto si vide" className="uppercase" />
         </div>
         <div className="field">
-          <label htmlFor="amount">Montant (€)</label>
+          <label htmlFor="amount">Montant (DH)</label>
           <input id="amount" name="amount" type="number" step="0.01" min="0" defaultValue="0" />
         </div>
         <div className="field">
@@ -35,7 +35,7 @@ export function CreateCodeForm() {
         </div>
         <div className="field md:col-span-2">
           <label htmlFor="label">Libellé</label>
-          <input id="label" name="label" required placeholder="Café 10€" />
+          <input id="label" name="label" required placeholder="Café 10 DH" />
         </div>
         <div className="md:col-span-2">
           <button className="btn-primary" disabled={pending}>

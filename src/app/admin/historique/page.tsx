@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { ActivityBadge } from "@/components/ActivityBadge";
 import { isAdminAuthenticated } from "@/lib/auth";
-import { formatDate, formatEuro } from "@/lib/format";
+import { formatDate, formatMoney } from "@/lib/format";
 import { getRecentTransactions } from "@/lib/loyalty";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,7 @@ export default async function AdminHistoryPage() {
                     <ActivityBadge type={tx.type} />
                   </td>
                   <td>{tx.description}</td>
-                  <td>{formatEuro(tx.amount)}</td>
+                  <td>{formatMoney(tx.amount)}</td>
                   <td className={tx.points >= 0 ? "text-emerald-300" : "text-rose-300"}>
                     {tx.points >= 0 ? "+" : ""}
                     {tx.points}

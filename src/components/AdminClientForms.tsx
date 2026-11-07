@@ -19,7 +19,7 @@ export function AdminClientForms({ clientId }: { clientId: string }) {
         <h3 className="font-display text-xl">Ajouter une consommation</h3>
         <input type="hidden" name="clientId" value={clientId} />
         <div className="field">
-          <label htmlFor="amount">Montant (€)</label>
+          <label htmlFor="amount">Montant (DH)</label>
           <input id="amount" name="amount" type="number" step="0.01" min="0" required defaultValue="10" />
         </div>
         <div className="field">

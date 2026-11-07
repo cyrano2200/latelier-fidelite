@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/auth";
-import { formatDateShort, formatEuro, formatPoints } from "@/lib/format";
+import { formatDateShort, formatMoney, formatPoints } from "@/lib/format";
 import { searchClients } from "@/lib/loyalty";
 
 export const dynamic = "force-dynamic";
@@ -54,7 +54,7 @@ export default async function AdminClientsPage({
                   <td className="font-medium">{client.name}</td>
                   <td>{client.phone}</td>
                   <td className="text-amber-soft">{formatPoints(client.points)}</td>
-                  <td>{formatEuro(client.total_spent)}</td>
+                  <td>{formatMoney(client.total_spent)}</td>
                   <td>{formatDateShort(client.created_at)}</td>
                   <td>
                     <Link

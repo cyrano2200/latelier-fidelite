@@ -37,7 +37,9 @@ npm install
 npm run dev
 ```
 
-Dépôt : [github.com/cyrano2200/latelier-fidelite](https://github.com/cyrano2200/latelier-fidelite)
+- Dépôt : [github.com/cyrano2200/latelier-fidelite](https://github.com/cyrano2200/latelier-fidelite)
+- App en ligne : [latelier-fidelite.vercel.app](https://latelier-fidelite.vercel.app)
+- Admin : [latelier-fidelite.vercel.app/admin/connexion](https://latelier-fidelite.vercel.app/admin/connexion) (PIN initial `2468`)
 
 Ouvrir [http://localhost:3000](http://localhost:3000).
 
@@ -54,6 +56,20 @@ En local, la base est créée automatiquement dans `.data/` (ignoré par git).
 | Codes | `CAFE10`, `BILL20`, `VISITE` |
 
 > Changez le PIN admin dès que possible : **Admin → Règles**.
+
+---
+
+## Déjà déployé (référence)
+
+| Ressource | URL |
+| --- | --- |
+| GitHub | https://github.com/cyrano2200/latelier-fidelite |
+| Production | https://latelier-fidelite.vercel.app |
+| Admin | https://latelier-fidelite.vercel.app/admin/connexion |
+| Vercel projet | équipe `fit-app6` · projet `latelier-fidelite` |
+| Base | Neon Postgres (`DATABASE_URL` branché via Vercel Marketplace) |
+
+Chaque push sur `main` redéploie automatiquement (repo GitHub connecté à Vercel).
 
 ---
 

@@ -39,6 +39,8 @@ Ouvrir [http://localhost:3000](http://localhost:3000).
 - Validation de visite / conso par code (QR généré côté admin)
 - Dashboard admin, gestion clients, règles, historique, codes
 
-## Publication
+## Publication Cursor
 
 Le fichier `cursor-app.json` déclare une base Postgres. Le script `build` applique les migrations SQL.
+
+Pour publier via `publish-app`, l’application doit vivre dans un dépôt GitHub/Origin rattaché à l’agent Cloud.

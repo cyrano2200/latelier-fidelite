@@ -31,11 +31,13 @@ Personnel : tableau de bord admin protégé par **PIN**.
 ## Démarrage local (5 minutes)
 
 ```bash
-git clone https://github.com/VOTRE_USER/VOTRE_REPO.git
-cd VOTRE_REPO
+git clone https://github.com/cyrano2200/latelier-fidelite.git
+cd latelier-fidelite
 npm install
 npm run dev
 ```
+
+Dépôt : [github.com/cyrano2200/latelier-fidelite](https://github.com/cyrano2200/latelier-fidelite)
 
 Ouvrir [http://localhost:3000](http://localhost:3000).
 
